@@ -10,37 +10,45 @@ source:
   sha256: fa16ebd5574744a09596ab342083a11d7209d8d05cf32891d1c985be7ec0cbd7
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<36]
 
 requirements:
   host:
+    - pip
+    - python
     - hatchling
     - hatch-requirements-txt
-    - pip
-    - python {{ python_min }}
   run:
+    - python
     - domdf-python-tools >=3.1.0
     - handy-archives >=0.1.0
     - packaging >=20.9
-    - python >={{ python_min }}
+  run_constrained:
+    # requires-python = ">=3.6.1"
+    - python >=3.6.1
 
+# We can`t enable pytest because conftest uses the coincidence package, which is unavailable on the main channel.
+# The policy states that packages are not specifically built for testing.
 test:
   imports:
     - dist_meta
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
   requires:
     - pip
-    - python {{ python_min }}
 
 about:
   home: https://github.com/repo-helper/dist-meta
   summary: Parse and create Python distribution metadata.
   license: MIT
+  license_family: MIT
   license_file: LICENSE
-  doc_url: https://dist-meta.readthedocs.io/en/latest
+  description: Parse and create Python distribution metadata.
+  doc_url: https://dist-meta.readthedocs.io
+  dev_url: https://github.com/repo-helper/dist-meta
 
 extra:
   recipe-maintainers:
