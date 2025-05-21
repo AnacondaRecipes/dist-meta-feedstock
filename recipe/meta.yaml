@@ -45,10 +45,9 @@ test:
     - pytest -v {{ ignore_tests }} tests
   requires:
     - pip
-    - pytest
-    - coincidence
-    - shippinglabel
-    - apeye-core
+    - pytest >=6.0.0
+    - coincidence >=0.2.0
+    - shippinglabel >=0.16.0
 
 about:
   home: https://github.com/repo-helper/dist-meta
