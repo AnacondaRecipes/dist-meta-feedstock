@@ -6,11 +6,11 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name | replace('-', '_') }}-{{ version }}.tar.gz
-  sha256: fa16ebd5574744a09596ab342083a11d7209d8d05cf32891d1c985be7ec0cbd7
+  url: https://github.com/repo-helper/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 0e2337a7c4db6c8b12ce626bb19812f5fd0b793838b21fbac3b5dfd074394255
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   skip: True  # [py<36]
 
@@ -29,16 +29,25 @@ requirements:
     # requires-python = ">=3.6.1"
     - python >=3.6.1
 
-# We can`t enable pytest because conftest uses the coincidence package, which is unavailable on the main channel.
-# The policy states that packages are not specifically built for testing.
+# ModuleNotFoundError: No module named 'first'
+{% set ignore_tests = " --ignore=tests/test_distributions.py" %}
+# ModuleNotFoundError: No module named 'apeye'
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_metadata_top_packages.py" %}
+
 test:
+  source_files:
+    - tests
   imports:
     - dist_meta
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v {{ ignore_tests }} tests
   requires:
     - pip
+    - pytest >=6.0.0
+    - coincidence >=0.2.0
+    - shippinglabel >=0.16.0
 
 about:
   home: https://github.com/repo-helper/dist-meta
