@@ -42,12 +42,15 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v {{ ignore_tests }} tests
+    # cyclic test dependency (restore test once dependency is in)
+    # dist-meta -> coincidence
+    # coincidence -> whey -> dist-meta
+    #- pytest -v {{ ignore_tests }} tests
   requires:
     - pip
     - pytest >=6.0.0
-    - coincidence >=0.2.0
-    - shippinglabel >=0.16.0
+    #- coincidence >=0.2.0
+    #- shippinglabel >=0.16.0
 
 about:
   home: https://github.com/repo-helper/dist-meta
