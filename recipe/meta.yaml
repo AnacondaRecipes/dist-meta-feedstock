@@ -38,6 +38,13 @@ requirements:
 # ModuleNotFoundError: No module named 'apeye'
 {% set ignore_tests = ignore_tests + " --ignore=tests/test_metadata_top_packages.py" %}
 
+# These tests all require the wheels from tests/wheels/, which we are intentionally
+# removing.
+{% set ignore_tests = ignore_tests + " --deselect=tests/test_record.py::test_record_entry" %}
+{% set ignore_tests = ignore_tests + " --deselect=tests/test_record.py::test_record_entry_no_distro" %}
+{% set ignore_tests = ignore_tests + " --deselect=tests/test_entry_points.py::test_get_entry_points" %}
+{% set ignore_tests = ignore_tests + " --deselect=tests/test_entry_points.py::test_get_all_entry_points" %}
+
 test:
   source_files:
     - tests
