@@ -11,7 +11,11 @@ source:
 
 build:
   number: 3
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  script:
+    # Exclude the wheels from the tests. They add bloat and may contain certificates
+    # which cause our certificate scanner to give us warnings/errors.
+    - rm -rf "$SRC_DIR/tests/wheels"
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   skip: True  # [py<36]
 
 requirements:
