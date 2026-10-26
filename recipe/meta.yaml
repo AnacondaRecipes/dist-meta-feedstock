@@ -10,7 +10,7 @@ source:
   sha256: 0e2337a7c4db6c8b12ce626bb19812f5fd0b793838b21fbac3b5dfd074394255
 
 build:
-  number: 3
+  number: 4
   script:
     # Exclude the wheels from the tests. They add bloat and may contain certificates
     # which cause our certificate scanner to give us warnings/errors.
